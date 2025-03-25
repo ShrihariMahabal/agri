@@ -23,12 +23,12 @@ export default function Layout() {
           tabBarShowLabel: true,
           tabBarStyle: {
             height: 70,
-            backgroundColor: "#ffffff", // Changed for light theme
+            backgroundColor: theme.background,
             borderTopWidth: 0,
             paddingVertical: 10,
             paddingHorizontal: 12,
-            shadowColor: "#ccc", // Lighter shadow for light theme
-            shadowOpacity: 0.1,
+            shadowColor: theme.shadow,
+            shadowOpacity: 0.3,
             shadowOffset: { width: 0, height: -2 },
             shadowRadius: 4,
             elevation: 5,
@@ -38,8 +38,8 @@ export default function Layout() {
             fontWeight: "500",
             marginBottom: 8,
           },
-          tabBarInactiveTintColor: "#8e8e93", // Updated tint for light theme
-          tabBarActiveTintColor: "#000", // Updated active tint to black
+          tabBarInactiveTintColor: theme.inactive,
+          tabBarActiveTintColor: theme.primary,
           tabBarItemStyle: {
             marginHorizontal: 10,
           },
@@ -58,8 +58,8 @@ export default function Layout() {
               <View
                 style={{
                   backgroundColor:
-                    color === "#000"
-                      ? "rgba(0, 0, 0, 0.1)"
+                    color === theme.primary
+                      ? theme.primaryTransparent
                       : "transparent",
                   borderRadius: 10,
                   padding: 4,
@@ -162,7 +162,7 @@ export default function Layout() {
           }}
         />
       </Tabs>
-      <StatusBar backgroundColor="#ffffff" style="dark" />
+      <StatusBar backgroundColor={theme.background} style="light" />
     </>
   );
 }
