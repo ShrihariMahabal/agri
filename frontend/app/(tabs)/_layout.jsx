@@ -162,7 +162,7 @@ export default function Layout() {
           }}
         />
       </Tabs>
-      <StatusBar backgroundColor={theme.background} style="light" />
+      <StatusBar barStyle="light-content" backgroundColor="#0f1924" />
     </>
   );
 }

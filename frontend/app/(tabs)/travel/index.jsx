@@ -35,12 +35,18 @@ const Travel = () => {
           maximumAge: 10000
         });
         
-        setRegion({
+        const initialRegion = {
           latitude: location.coords.latitude,
           longitude: location.coords.longitude,
           latitudeDelta: 0.005,
           longitudeDelta: 0.005,
-        });
+        };
+        
+        setRegion(initialRegion);
+        // Ensure map centers on user's location when it loads
+        setTimeout(() => {
+          mapRef.current?.animateToRegion(initialRegion, 1000);
+        }, 500);
       } catch (error) {
         setErrorMsg('Could not fetch location. Please check your GPS settings.');
         console.error("Location error:", error);
@@ -122,9 +128,9 @@ const Travel = () => {
   if (loading) {
     return (
       <SafeAreaView style={styles.loadingContainer} edges={['top', 'left', 'right']}>
-        <StatusBar barStyle="dark-content" backgroundColor="#f8f9fa" />
-        <ActivityIndicator size="large" color="#546E7A" />
-        <Text style={styles.loadingText}>
+        <StatusBar barStyle="light-content" backgroundColor="#0f1924" />
+        <ActivityIndicator size="large" color="#00ffcc" />
+        <Text style={[styles.loadingText, { fontFamily: 'Poppins_500Medium' }]}>
           {loadingLocation ? 'Getting your location...' : 'Loading map...'}
         </Text>
       </SafeAreaView>
@@ -134,9 +140,9 @@ const Travel = () => {
   if (errorMsg && !region) {
     return (
       <SafeAreaView style={styles.errorContainer} edges={['top', 'left', 'right']}>
-        <StatusBar barStyle="dark-content" backgroundColor="#f8f9fa" />
-        <Ionicons name="warning-outline" size={48} color="#D84315" />
-        <Text style={styles.errorText}>{errorMsg}</Text>
+        <StatusBar barStyle="light-content" backgroundColor="#0f1924" />
+        <Ionicons name="warning-outline" size={48} color="#00ffcc" />
+        <Text style={[styles.errorText, { fontFamily: 'Poppins_500Medium' }]}>{errorMsg}</Text>
         <TouchableOpacity 
           style={styles.retryButton}
           onPress={() => {
@@ -145,7 +151,7 @@ const Travel = () => {
             setLoadingLocation(true);
           }}
         >
-          <Text style={styles.retryButtonText}>Retry</Text>
+          <Text style={[styles.retryButtonText, { fontFamily: 'Poppins_600SemiBold' }]}>Retry</Text>
         </TouchableOpacity>
       </SafeAreaView>
     );
@@ -153,16 +159,16 @@ const Travel = () => {
 
   return (
     <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
-      <StatusBar barStyle="light-content" backgroundColor="#455A64" />
+      <StatusBar barStyle="light-content" backgroundColor="#0f1924" />
       
       {/* Header */}
       <View style={styles.headerContainer}>
         <LinearGradient
-          colors={['#455A64', '#607D8B']}
+          colors={['#0f1924', '#182635']}
           style={styles.headerGradient}
         >
-          <Text style={styles.headerTitle}>Farm Area Selection</Text>
-          <Text style={styles.headerSubtitle}>
+          <Text style={[styles.headerTitle, { fontFamily: 'Poppins_600SemiBold' }]}>Farm Area Selection</Text>
+          <Text style={[styles.headerSubtitle, { fontFamily: 'Poppins_400Regular' }]}>
             Tap on the map to mark the boundaries of your farm
           </Text>
         </LinearGradient>
@@ -187,8 +193,8 @@ const Travel = () => {
           {polygonPoints.length > 0 && (
             <Polygon
               coordinates={polygonPoints}
-              strokeColor="#FFFFFF"
-              fillColor="rgba(96, 125, 139, 0.4)"
+              strokeColor="#00ffcc"
+              fillColor="rgba(0, 255, 204, 0.2)"
               strokeWidth={2}
             />
           )}
@@ -213,14 +219,13 @@ const Travel = () => {
           {/* Connection lines between points */}
           {polygonPoints.length > 1 && (
             polygonPoints.map((point, index) => {
-              // Don't draw a line from the last point to the first unless we're completing the polygon
               if (index === polygonPoints.length - 1) return null;
               
               return (
                 <Polygon
                   key={`line-${index}`}
                   coordinates={[point, polygonPoints[index + 1]]}
-                  strokeColor="#FFFFFF"
+                  strokeColor="#00ffcc"
                   strokeWidth={2}
                 />
               );
@@ -233,13 +238,13 @@ const Travel = () => {
           style={styles.locationButton}
           onPress={centerOnLocation}
         >
-          <Ionicons name="locate" size={22} color="#455A64" />
+          <Ionicons name="locate" size={22} color="#00ffcc" />
         </TouchableOpacity>
         
         {/* Info panel */}
         <View style={styles.infoPanel}>
-          <Ionicons name="information-circle-outline" size={16} color="#455A64" style={styles.infoPanelIcon} />
-          <Text style={styles.infoPanelText}>
+          <Ionicons name="information-circle-outline" size={16} color="#00ffcc" style={styles.infoPanelIcon} />
+          <Text style={[styles.infoPanelText, { fontFamily: 'Poppins_500Medium' }]}>
             Points: {polygonPoints.length} {polygonPoints.length >= 3 ? '✓' : ''}
           </Text>
         </View>
@@ -259,12 +264,13 @@ const Travel = () => {
           <Ionicons 
             name="arrow-undo" 
             size={18} 
-            color={polygonPoints.length === 0 ? '#B0BEC5' : '#455A64'} 
+            color={polygonPoints.length === 0 ? '#8b9eb5' : '#00ffcc'} 
           />
           <Text style={[
             styles.buttonText, 
             styles.secondaryButtonText,
-            polygonPoints.length === 0 ? styles.buttonTextDisabled : null
+            polygonPoints.length === 0 ? styles.buttonTextDisabled : null,
+            { fontFamily: 'Poppins_500Medium' }
           ]}>
             Undo
           </Text>
@@ -282,12 +288,13 @@ const Travel = () => {
           <Ionicons 
             name="refresh" 
             size={18} 
-            color={polygonPoints.length === 0 ? '#B0BEC5' : '#BF360C'} 
+            color={polygonPoints.length === 0 ? '#8b9eb5' : '#ff6b6b'} 
           />
           <Text style={[
             styles.buttonText, 
             styles.warningButtonText,
-            polygonPoints.length === 0 ? styles.buttonTextDisabled : null
+            polygonPoints.length === 0 ? styles.buttonTextDisabled : null,
+            { fontFamily: 'Poppins_500Medium' }
           ]}>
             Reset
           </Text>
@@ -298,16 +305,16 @@ const Travel = () => {
             style={[styles.button, styles.primaryButton]}
             onPress={completePolygon}
           >
-            <Ionicons name="checkmark-circle" size={18} color="#FFF" />
-            <Text style={styles.buttonText}>Complete</Text>
+            <Ionicons name="checkmark-circle" size={18} color="#0f1924" />
+            <Text style={[styles.buttonText, { fontFamily: 'Poppins_600SemiBold' }]}>Complete</Text>
           </TouchableOpacity>
         )}
       </View>
       
       {/* Help text */}
       <View style={styles.helpContainer}>
-        <Ionicons name="help-circle-outline" size={14} color="#78909C" style={styles.helpIcon} />
-        <Text style={styles.helpText}>
+        <Ionicons name="help-circle-outline" size={14} color="#8b9eb5" style={styles.helpIcon} />
+        <Text style={[styles.helpText, { fontFamily: 'Poppins_400Regular' }]}>
           Mark at least 3 points to define your farm boundaries
         </Text>
       </View>
@@ -324,12 +331,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f8f9fa',
+    backgroundColor: '#0f1924',
   },
   loadingText: {
     marginTop: 16,
     fontSize: 16,
-    color: '#546E7A',
+    color: '#8b9eb5',
     fontWeight: '500',
   },
   errorContainer: {
@@ -503,7 +510,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 16,
-    backgroundColor: 'white',
+    backgroundColor: '#182635',
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
     shadowColor: '#000',
@@ -528,52 +535,53 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   primaryButton: {
-    backgroundColor: '#546E7A',
+    backgroundColor: '#00ffcc',
     paddingHorizontal: 24,
   },
   secondaryButton: {
-    backgroundColor: '#ECEFF1',
+    backgroundColor: 'transparent',
     borderWidth: 1,
-    borderColor: '#CFD8DC',
+    borderColor: '#00ffcc',
+    elevation: 0,
+    shadowOpacity: 0,
   },
   warningButton: {
-    backgroundColor: '#FFEBEE',
+    backgroundColor: 'transparent',
     borderWidth: 1,
-    borderColor: '#FFCDD2',
+    borderColor: '#ff6b6b',
+    elevation: 0,
+    shadowOpacity: 0,
   },
   buttonDisabled: {
-    backgroundColor: '#F5F5F5',
-    borderColor: '#EEEEEE',
+    backgroundColor: 'rgba(139, 158, 181, 0.1)',
+    borderColor: '#8b9eb5',
     elevation: 0,
     shadowOpacity: 0,
   },
   buttonText: {
-    color: 'white',
+    color: '#0f1924',
     fontWeight: '600',
     fontSize: 14,
     marginLeft: 8,
   },
   secondaryButtonText: {
-    color: '#455A64',
+    color: '#00ffcc',
   },
   warningButtonText: {
-    color: '#BF360C',
+    color: '#ff6b6b',
   },
   buttonTextDisabled: {
-    color: '#B0BEC5',
+    color: '#8b9eb5',
   },
   helpContainer: {
     padding: 10,
     alignItems: 'center',
-    backgroundColor: '#ECEFF1',
+    backgroundColor: '#182635',
     flexDirection: 'row',
     justifyContent: 'center',
   },
-  helpIcon: {
-    marginRight: 6,
-  },
   helpText: {
-    color: '#78909C',
+    color: '#8b9eb5',
     fontSize: 13,
   },
 });

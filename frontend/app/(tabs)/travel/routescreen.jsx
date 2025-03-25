@@ -364,7 +364,6 @@ const RouteScreen = () => {
   if (loading) {
     return (
       <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
-        <StatusBar barStyle="light-content" backgroundColor="#455A64" />
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#607D8B" />
           <Text style={styles.loadingText}>Processing farm sectors...</Text>
@@ -375,7 +374,6 @@ const RouteScreen = () => {
 
   return (
     <SafeAreaView style={styles.container} edges={['left', 'right']}>
-      <StatusBar barStyle="light-content" backgroundColor="#455A64" />
       <ScrollView>
         {/* Header */}
         <View style={styles.headerContainer}>
